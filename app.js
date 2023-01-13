@@ -6,8 +6,11 @@ const UserAccount = require('./models/User');
 const dotenv = require("dotenv");
 dotenv.config();
 const User = require('./routes/auth');
-// const Sauces = require('./routes/sauces');
+const Sauces = require('./routes/sauces');
 const path = require('path');
+const cors = require('cors')
+
+app.use(cors())
 
 const DB_HOST = process.env.DB_HOST;
 const DB_USER = process.env.DB_USER;
@@ -31,7 +34,7 @@ app.use((req, res, next) => {
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/auth', User);
-// app.use('/api/sauces', Sauces);
+app.use('/api/sauces', Sauces);
 
 
 module.exports = app;
