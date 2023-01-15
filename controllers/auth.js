@@ -1,6 +1,5 @@
 const fs = require('fs');
 const User = require('../models/User');
-const Sauces = require('../models/sauces')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
@@ -45,21 +44,3 @@ exports.signup = (req, res, next) => {
         .catch(error => res.status(500).json({ error }));
  };
 
- exports.deleteThing = (req, res, next) => {
-    Sauces.findOne({ _id: req.params.id})
-        .then(thing => {
-            if (thing.userId != req.auth.userId) {
-                res.status(401).json({message: 'Not authorized'});
-            } else {
-                const filename = thing.imageUrl.split('/images/')[1];
-                fs.unlink(`images/${filename}`, () => {
-                    Sauces.deleteOne({_id: req.params.id})
-                        .then(() => { res.status(200).json({message: 'Objet supprimé !'})})
-                        .catch(error => res.status(401).json({ error }));
-                });
-            }
-        })
-        .catch( error => {
-            res.status(500).json({ error });
-        });
- };

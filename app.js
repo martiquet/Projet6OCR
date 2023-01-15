@@ -9,6 +9,8 @@ const User = require('./routes/auth');
 const Sauces = require('./routes/sauces');
 const path = require('path');
 const cors = require('cors')
+const fs = require('fs');
+
 
 app.use(cors())
 
@@ -38,3 +40,5 @@ app.use('/api/sauces', Sauces);
 
 
 module.exports = app;
+
+// HELMET, EXPRESS RATE LIMIT, MONGO MASK
