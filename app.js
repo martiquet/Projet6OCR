@@ -10,6 +10,17 @@ const Sauces = require('./routes/sauces');
 const path = require('path');
 const cors = require('cors')
 const fs = require('fs');
+const rateLimit = require('express-rate-limit')
+
+const apiLimiter = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+})
+
+// Apply the rate limiting middleware to API calls only
+app.use('/api', apiLimiter)
 
 
 app.use(cors())
@@ -37,6 +48,9 @@ app.use((req, res, next) => {
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/auth', User);
 app.use('/api/sauces', Sauces);
+
+
+
 
 
 module.exports = app;
