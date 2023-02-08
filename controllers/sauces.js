@@ -57,7 +57,7 @@ exports.modifySauce = (req, res, next) => {
           { _id: req.params.id },
           { ...sauceObject, _id: req.params.id }
         )
-          .then(() => res.status(200).json({ message: "Objet modifié!" }))
+          .then(() => res.status(200).json({ message: "Sauce modifiée!" }))
           .catch((error) => res.status(401).json({ error }));
       }
     })
@@ -111,7 +111,7 @@ exports.sysLike = (req, res, next) => {
           $pull: { usersLiked: req.body.userId },
         }
       )
-        .then(() => res.status(200).json({ message: "Rien" }))
+        .then(() => res.status(200).json({ message: "" }))
         .catch((error) => res.status(400).json({ error }));
     if (!sauce.usersDisliked.includes(req.body.userId) && req.body.like === -1)
       Sauces.updateOne(
@@ -121,7 +121,7 @@ exports.sysLike = (req, res, next) => {
           $push: { usersDisliked: req.body.userId },
         }
       )
-        .then(() => res.status(200).json({ message: "Rien" }))
+        .then(() => res.status(200).json({ message: "Dislike" }))
         .catch((error) => res.status(400).json({ error }));
     if (sauce.usersDisliked.includes(req.body.userId) && req.body.like === 0)
       Sauces.updateOne(
@@ -131,7 +131,7 @@ exports.sysLike = (req, res, next) => {
           $pull: { usersDisliked: req.body.userId },
         }
       )
-        .then(() => res.status(200).json({ message: "Rien" }))
+        .then(() => res.status(200).json({ message: "" }))
         .catch((error) => res.status(400).json({ error }));
   });
 };
