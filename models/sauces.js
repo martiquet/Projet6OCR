@@ -1,3 +1,4 @@
+// Import package mongodb, création d'un model de sauce et export
 const mongoose = require("mongoose");
 
 const sauceSchema = mongoose.Schema({

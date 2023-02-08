@@ -1,21 +1,27 @@
+// Import package express (node server)
 const express = require("express");
-const mongoose = require("mongoose");
 const app = express();
-const http = require("http");
-const UserAccount = require("./models/User");
+// Import package moongoose (mongodb)
+const mongoose = require("mongoose");
+// Accès aux variable dans .env
 const dotenv = require("dotenv");
 dotenv.config();
+// Import des diffèrentes routes
 const User = require("./routes/auth");
 const Sauces = require("./routes/sauces");
+// Permet de se déplacer dans l'arborescence du dossier
 const path = require("path");
-const fs = require("fs");
+// Import package helmet
 const helmet = require("helmet");
+// Import package express rate limit
 const rateLimit = require("express-rate-limit");
 
+// Accès aux identifiants mongoDB du .env
 const DB_HOST = process.env.DB_HOST;
 const DB_USER = process.env.DB_USER;
 const DB_PASSWORD = process.env.DB_PASSWORD;
 
+// Connection à ma base de donnée mongoDB
 mongoose
   .connect(
     `mongodb+srv://` + DB_USER + `:` + DB_PASSWORD + `@` + DB_HOST + ``,
@@ -24,8 +30,10 @@ mongoose
   .then(() => console.log("Connexion à MongoDB réussie !"))
   .catch(() => console.log("Connexion à MongoDB échouée !"));
 
+// Parse les requêtes en json
 app.use(express.json());
 
+// Eviter les erreurs CORS en permettant les requêtes cross-origin
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -39,10 +47,12 @@ app.use((req, res, next) => {
   next();
 });
 
+// Lecture du dossier image
 app.use("/images", express.static(path.join(__dirname, "images")));
+
+// Utilisation des routes
 app.use("/api/auth", User);
 app.use("/api/sauces", Sauces);
-app.use(helmet());
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -53,5 +63,6 @@ const limiter = rateLimit({
 
 // Apply the rate limiting middleware to all requests
 app.use(limiter);
+app.use(helmet());
 
 module.exports = app;

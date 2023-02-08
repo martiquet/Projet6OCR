@@ -1,3 +1,6 @@
+/* Import package mongodb, création model d'utilisateur
+application du package uniqueValidator et export de User*/
+
 const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 

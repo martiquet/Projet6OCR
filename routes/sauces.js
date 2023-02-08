@@ -4,6 +4,7 @@ const sauceCtrl = require('../controllers/sauces');
 const multer = require('../middlewares/multer-config')
 const auth = require('../middlewares/auth')
 
+// Associé une fonction de mon controller à une route et une méthode
 
 router.get('/', auth, sauceCtrl.findSauces);
 router.get('/:id', auth, sauceCtrl.findOneSauce);
