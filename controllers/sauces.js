@@ -1,18 +1,20 @@
 const Sauces = require("../models/sauces");
+//Import du package filesystem
 const fs = require("fs");
 
+//Récupération de toute les sauces
 exports.findSauces = (req, res, next) => {
   Sauces.find()
     .then((sauces) => res.status(200).json(sauces))
     .catch((error) => res.status(400).json({ error }));
 };
-
+//Récupération d'une sauce
 exports.findOneSauce = (req, res, next) => {
   Sauces.findOne({ _id: req.params.id })
     .then((sauce) => res.status(200).json(sauce))
     .catch((error) => res.status(404).json({ error }));
 };
-
+//Ajout d'une sauce
 exports.addSauces = (req, res, next) => {
   const newsauces = JSON.parse(req.body.sauce);
   delete newsauces._id;
@@ -35,8 +37,7 @@ exports.addSauces = (req, res, next) => {
     });
 };
 
-console.log("addsauces");
-
+//Modification d'une sauce
 exports.modifySauce = (req, res, next) => {
   const sauceObject = req.file
     ? {
@@ -51,7 +52,7 @@ exports.modifySauce = (req, res, next) => {
   Sauces.findOne({ _id: req.params.id })
     .then((thing) => {
       if (thing.userId != req.auth.userId) {
-        res.status(401).json({ message: "Not authorized" });
+        res.status(403).json({ message: "Not authorized" });
       } else {
         Sauces.updateOne(
           { _id: req.params.id },
@@ -65,12 +66,12 @@ exports.modifySauce = (req, res, next) => {
       res.status(400).json({ error });
     });
 };
-
+//Supression d'une sauce
 exports.deleteSauce = (req, res, next) => {
   Sauces.findOne({ _id: req.params.id })
     .then((thing) => {
       if (thing.userId != req.auth.userId) {
-        res.status(401).json({ message: "Not authorized" });
+        res.status(403).json({ message: "Not authorized" });
       } else {
         const filename = thing.imageUrl.split("/images/")[1];
         fs.unlink(`images/${filename}`, () => {
@@ -90,7 +91,7 @@ exports.deleteSauce = (req, res, next) => {
       res.status(500).json({ error });
     });
 };
-
+//Système de like / dislike
 exports.sysLike = (req, res, next) => {
   Sauces.findOne({ _id: req.params.id }).then((sauce) => {
     if (!sauce.usersLiked.includes(req.body.userId) && req.body.like === 1)

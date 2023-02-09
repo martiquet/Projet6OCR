@@ -1,9 +1,8 @@
-const fs = require("fs");
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const rateLimit = require("express-rate-limit");
 
+//Export de la fonction sign up 
 exports.signup = (req, res, next) => {
   bcrypt
     .hash(req.body.password, 10)
